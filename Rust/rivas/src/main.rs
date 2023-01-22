@@ -1,3 +1,7 @@
+mod binary;
+mod assembler;
+
+use binary::*;
 use core::panic;
 use std::env;
 
