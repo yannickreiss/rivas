@@ -19,6 +19,8 @@ fn main() {
         panic!("Wrong number of arguments given!");
     }
 
+    let mut filename: &str = "";
+
     // work through command line args
     println!("Running rivas Rust-Version at {}.", argv[0]);
     for i in 1..argc - 1 {
@@ -26,7 +28,10 @@ fn main() {
             "-o" => println!("Set output name, Not yet implemented!"),
             "-h" => println!("Help: NYI!"),
             "-vhdl" => println!("Format Code for usage in VHDL: NYI!"),
-            _ => println!("Input file translation: NYI!"),
+            _ => filename = &argv[i],
         }
     }
+    let file = binary::file::new(filename);
+
+    file.
 }
