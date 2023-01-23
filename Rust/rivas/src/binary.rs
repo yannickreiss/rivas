@@ -18,7 +18,8 @@ struct file {
 impl file {
     pub fn new(input_filename: &str) -> file {
         
-        let content: String = fs::read_to_string(input_filename).expect("Could not open File!");
+        println!("Filename: {}", input_filename);
+        let content: String = fs::read_to_string(input_filename).expect("Could not open File {}!");
 
         let mut lines: Vec<String> = Vec::new();
 
@@ -40,8 +41,15 @@ impl file {
     }
 
     pub fn translate(&mut self) {
-        
+        for i in 0..self.cont_in.len() {
+            let binary = translate(&self.cont_in[i]);
+            self.cont_out.push(binary);
+        }
     }
 
-    pub fn write(&mut self) {}
+    pub fn write(&mut self) {
+        for line in 0..self.cont_out.len() {
+            println!("{}", self.cont_out[line]);
+        }
+    }
 }

@@ -23,25 +23,26 @@ struct Instruction {
 }
 
 pub fn translate(input: &str) -> String {
-    let mut rv_: String;
+    let rv_: String;
 
     // Iterate over lines in input
     let instruction: String = String::from(str::replace(input, ",", " "));
+    println!("Instruction: {}", instruction);
     let mut token = instruction.split_whitespace();
 
     // split instruction and call functions for different types
     let opcode: &str = token.next().unwrap();
     match opcode.to_uppercase().as_str() {
         "ADD" | "SUB" | "SLL" | "SLT" | "SLTU" | "XOR" | "SRL" | "SRA" | "OR" | "AND" => {
-            rv_ = rtype(input)
+            rv_ = rtype(&instruction)
         } // R-Type
         "JALR" | "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" | "SLLI" | "SRLI" | "SRAI" => {
-            rv_ = itype(input)
+            rv_ = itype(&instruction)
         } // I-Type
-        "SB" | "SH" | "SW" => rv_ = stype(input), // S-Type
-        "BEQ" | "BNE" | "BLT" | "BGE" | "BLTU" | "BGEU" => rv_ = btype(input), // B-Type
-        "LUI" | "AUIPC" => rv_ = utype(input),    // U-Type
-        "JAL" => rv_ = jtype(input),
+        "SB" | "SH" | "SW" => rv_ = stype(&instruction), // S-Type
+        "BEQ" | "BNE" | "BLT" | "BGE" | "BLTU" | "BGEU" => rv_ = btype(&instruction), // B-Type
+        "LUI" | "AUIPC" => rv_ = utype(&instruction),    // U-Type
+        "JAL" => rv_ = jtype(&instruction),
         _ => panic!("Unknown opcode!"),
     };
 
@@ -56,7 +57,7 @@ fn into_bin(register: &str) -> String {
         register.to_string()
     };
 
-    let mut reg_id = register.parse::<u8>().unwrap();
+    let mut reg_id = reg.parse::<u8>().expect("Parsing not successfull!");
 
     let mut reg_bin: String = String::from("");
     while reg_id > 0 {
@@ -67,13 +68,16 @@ fn into_bin(register: &str) -> String {
         } 
         reg_id /= 2;
     }
+    while reg_bin.len() < 5 {
+        reg_bin = String::from("0") + reg_bin.as_str();
+    }
     reg_bin
 }
 
 fn rtype(instruction: &str) -> String {
     let mut operands: SplitWhitespace = instruction.split_whitespace();
     let opcode: &str = operands.next().unwrap();
-    let funct3: &str = match opcode {
+    let funct3: &str = match opcode.to_uppercase().as_str() {
         "ADD" | "SUB" => "000",
         "SLL" => "001",
         "SLT" => "010",
@@ -85,7 +89,7 @@ fn rtype(instruction: &str) -> String {
         "AND" => "111",
         _ => panic!("Unrecognized opcode: {}!", opcode),
     };
-    let funct7: &str = match opcode {
+    let funct7: &str = match opcode.to_uppercase().as_str() {
         "SUB" | "SRA" => "0100000",
         _ => "0000000",
     };

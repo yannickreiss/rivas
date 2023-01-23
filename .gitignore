@@ -1,2 +1,5 @@
 Rust/rivas/Cargo.lock
 Rust/rivas/target/
+Ada/rivas/rivas 
+*.ali
+*.o

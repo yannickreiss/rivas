@@ -1,7 +1,7 @@
 with Ada.Command_Line;
 with Ada.Text_IO;
 
-procedure Rivas () is
+procedure Rivas is
     
 begin
     

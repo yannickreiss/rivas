@@ -1,5 +1,5 @@
-mod binary;
 mod assembler;
+mod binary;
 
 use binary::*;
 use core::panic;
@@ -20,18 +20,34 @@ fn main() {
     }
 
     let mut filename: &str = "";
+    let mut file_out: &str = "";
 
     // work through command line args
     println!("Running rivas Rust-Version at {}.", argv[0]);
-    for i in 1..argc - 1 {
-        match argv[i].as_str() {
-            "-o" => println!("Set output name, Not yet implemented!"),
-            "-h" => println!("Help: NYI!"),
-            "-vhdl" => println!("Format Code for usage in VHDL: NYI!"),
-            _ => filename = &argv[i],
+
+    let mut argb: bool = false; // If true this will pause the incrementation once
+    for i in 1..argc {
+        if argb {
+            argb = false;
+        } else {
+            match argv[i].as_str() {
+                "-o" => {
+                    file_out = &argv[i + 1];
+                    argb = true;
+                }
+                "-h" => println!("Help: NYI!"),
+                "-vhdl" => println!("Format Code for usage in VHDL: NYI!"),
+                _ => filename = &argv[i],
+            }
         }
     }
-    let file = binary::file::new(filename);
+    let mut file = binary::file::new(filename);
 
-    file.
+    if (file_out != "") {
+        file.set_out(file_out);
+    }
+
+    file.translate();
+
+    file.write();
 }
