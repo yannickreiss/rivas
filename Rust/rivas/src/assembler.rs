@@ -196,7 +196,6 @@ fn stype(instruction: &str) -> String {
 
 // B-Types not yet implemented!
 fn btype(instruction: &str) -> String {
-    panic!("B-Types not yet implemented!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -231,7 +230,7 @@ fn btype(instruction: &str) -> String {
         None => (),
     }
     println!("Immediate: {}", immediate);
-    String::from("") + &immediate[..1] + &immediate[1..7] + &rs2 + &rs1 + funct3 + &immediate[7..] + "1100011"
+    String::from("") + &immediate[..7] + &rs2 + &rs1 + funct3 + &immediate[7..] + "1100011"
 }
 
 // U-Type not yet implemented
