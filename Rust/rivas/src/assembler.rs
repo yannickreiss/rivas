@@ -53,9 +53,9 @@ fn into_bin(register: &str) -> String {
     let mut reg_bin: String = String::from("");
     while reg_id > 0 {
         if reg_id % 2 == 1 {
-            reg_bin = reg_bin + "1";
+            reg_bin = String::from("1") + &reg_bin.to_string();
         } else {
-            reg_bin = reg_bin + "0";
+            reg_bin = String::from("0") + &reg_bin.to_string();
         }
         reg_id /= 2;
     }
@@ -105,7 +105,6 @@ fn rtype(instruction: &str) -> String {
     String::from(funct7) + &rs2 + &rs1 + funct3 + &rd + "0110011"
 }
 
-/* TODO: change R to I signature */
 fn itype(instruction: &str) -> String {
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
@@ -154,17 +153,182 @@ fn itype(instruction: &str) -> String {
 }
 
 fn stype(instruction: &str) -> String {
-    String::new()
+    panic!("S-Types not yet implemented!!!");
+    let mut operands: SplitWhitespace = instruction.split_whitespace();
+
+    let opcode: &str = operands.next().unwrap();
+    println!("OPC:\t{}", opcode);
+
+    let funct3: &str = match opcode.to_uppercase().as_str() {
+        "SB" => "000",
+        "SH" => "001",
+        "SW" => "010",
+        _ => panic!("Unrecognized opcode: {}!", opcode),
+    };
+    println!("FN3:\t{}", funct3);
+
+    let rs1: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("2 missing operands in instruction {}!", opcode),
+    };
+    println!("rs1:\t{}", rs1);
+
+    let rs2: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("1 missing operand in instruction {}!", opcode),
+    };
+    println!("rs2:\t{}", rs2);
+
+    let mut immediate: String = into_bin(operands.next().unwrap());
+    while immediate.len() < 12 {
+        immediate = String::from("0") + immediate.as_str();
+    }
+    println!("imm:\t{}", immediate);
+
+    match operands.next() {
+        Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
+        None => (),
+    }
+
+    String::from("") + &immediate[5..11] + &rs2 + &rs1 + funct3 + &immediate[0..4] + "0100011"
 }
 
 fn btype(instruction: &str) -> String {
-    String::new()
+    let mut operands: SplitWhitespace = instruction.split_whitespace();
+
+    let opcode: &str = operands.next().unwrap();
+
+    let funct3: &str = match opcode.to_uppercase().as_str() {
+        "JALR" | "LB" | "ADDI" => "000",
+        "LH" => "001",
+        "LW" | "SLTI" => "010",
+        "SLTIU" => "011",
+        "LBU" | "XORI" => "100",
+        "LHU" => "101",
+        "ORI" => "110",
+        "ANDI" => "111",
+        _ => panic!("Unrecognized opcode: {}!", opcode),
+    };
+
+    let rd: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("3 missing operands in instruction {}!", opcode),
+    };
+
+    let mut immediate: String = into_bin(operands.next().unwrap());
+    while immediate.len() < 12 {
+        immediate = String::from("0") + immediate.as_str();
+    }
+
+    let rs1: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("2 missing operands in instruction {}!", opcode),
+    };
+    let opcode_bin: &str = match opcode.to_uppercase().as_str() {
+        "JALR" => "1100111",
+        "LB" | "LH" | "LW" | "LBU" | "LHU" => "0000011",
+        "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" => "0010011",
+        _ => panic!("Uncecognized opcode: {}!", opcode),
+    };
+
+    match operands.next() {
+        Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
+        None => (),
+    }
+
+    immediate + &rs1 + funct3 + &rd + opcode_bin
 }
 
 fn utype(instruction: &str) -> String {
-    String::new()
+    let mut operands: SplitWhitespace = instruction.split_whitespace();
+
+    let opcode: &str = operands.next().unwrap();
+
+    let funct3: &str = match opcode.to_uppercase().as_str() {
+        "JALR" | "LB" | "ADDI" => "000",
+        "LH" => "001",
+        "LW" | "SLTI" => "010",
+        "SLTIU" => "011",
+        "LBU" | "XORI" => "100",
+        "LHU" => "101",
+        "ORI" => "110",
+        "ANDI" => "111",
+        _ => panic!("Unrecognized opcode: {}!", opcode),
+    };
+
+    let rd: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("3 missing operands in instruction {}!", opcode),
+    };
+
+    let rs1: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("2 missing operands in instruction {}!", opcode),
+    };
+
+    let mut immediate: String = into_bin(operands.next().unwrap());
+    while immediate.len() < 12 {
+        immediate = String::from("0") + immediate.as_str();
+    }
+
+    let opcode_bin: &str = match opcode.to_uppercase().as_str() {
+        "JALR" => "1100111",
+        "LB" | "LH" | "LW" | "LBU" | "LHU" => "0000011",
+        "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" => "0010011",
+        _ => panic!("Uncecognized opcode: {}!", opcode),
+    };
+
+    match operands.next() {
+        Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
+        None => (),
+    }
+
+    immediate + &rs1 + funct3 + &rd + opcode_bin
 }
 
 fn jtype(instruction: &str) -> String {
-    String::new()
+    let mut operands: SplitWhitespace = instruction.split_whitespace();
+
+    let opcode: &str = operands.next().unwrap();
+
+    let funct3: &str = match opcode.to_uppercase().as_str() {
+        "JALR" | "LB" | "ADDI" => "000",
+        "LH" => "001",
+        "LW" | "SLTI" => "010",
+        "SLTIU" => "011",
+        "LBU" | "XORI" => "100",
+        "LHU" => "101",
+        "ORI" => "110",
+        "ANDI" => "111",
+        _ => panic!("Unrecognized opcode: {}!", opcode),
+    };
+
+    let rd: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("3 missing operands in instruction {}!", opcode),
+    };
+
+    let rs1: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("2 missing operands in instruction {}!", opcode),
+    };
+
+    let mut immediate: String = into_bin(operands.next().unwrap());
+    while immediate.len() < 12 {
+        immediate = String::from("0") + immediate.as_str();
+    }
+
+    let opcode_bin: &str = match opcode.to_uppercase().as_str() {
+        "JALR" => "1100111",
+        "LB" | "LH" | "LW" | "LBU" | "LHU" => "0000011",
+        "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" => "0010011",
+        _ => panic!("Uncecognized opcode: {}!", opcode),
+    };
+
+    match operands.next() {
+        Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
+        None => (),
+    }
+
+    immediate + &rs1 + funct3 + &rd + opcode_bin
 }

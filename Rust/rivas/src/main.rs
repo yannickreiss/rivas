@@ -43,7 +43,7 @@ fn main() {
     }
     let mut file = binary::File::new(filename);
 
-    if (file_out != "") {
+    if file_out != "" {
         file.set_out(file_out);
     }
 
