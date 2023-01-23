@@ -18,7 +18,6 @@ struct file {
 impl file {
     pub fn new(input_filename: &str) -> file {
         
-        println!("Filename: {}", input_filename);
         let content: String = fs::read_to_string(input_filename).expect("Could not open File {}!");
 
         let mut lines: Vec<String> = Vec::new();
@@ -48,6 +47,7 @@ impl file {
     }
 
     pub fn write(&mut self) {
+        println!("Assembling {} into {}", self.name_in, self.name_out);
         for line in 0..self.cont_out.len() {
             println!("{}", self.cont_out[line]);
         }
