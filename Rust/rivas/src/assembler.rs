@@ -152,8 +152,9 @@ fn itype(instruction: &str) -> String {
     immediate + &rs1 + funct3 + &rd + opcode_bin
 }
 
+// Still unfinished. DO NOT USE UNTIL Tested!
 fn stype(instruction: &str) -> String {
-    panic!("S-Types not yet implemented!!!");
+    panic!("S-Types not yet tested!!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -193,7 +194,9 @@ fn stype(instruction: &str) -> String {
     String::from("") + &immediate[5..11] + &rs2 + &rs1 + funct3 + &immediate[0..4] + "0100011"
 }
 
+// B-Types not yet implemented!
 fn btype(instruction: &str) -> String {
+    panic!("B-Types not yet implemented!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -239,7 +242,9 @@ fn btype(instruction: &str) -> String {
     immediate + &rs1 + funct3 + &rd + opcode_bin
 }
 
+// U-Type not yet implemented
 fn utype(instruction: &str) -> String {
+    panic!("U-Types are not yet implemented!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -286,7 +291,9 @@ fn utype(instruction: &str) -> String {
     immediate + &rs1 + funct3 + &rd + opcode_bin
 }
 
+// J-Type is not yet implemented!
 fn jtype(instruction: &str) -> String {
+    panic!("J-Type is not yet implemented!!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
