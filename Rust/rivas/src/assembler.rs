@@ -220,7 +220,14 @@ fn btype(instruction: &str) -> String {
         None => panic!("2 missing operands in instruction {}!", opcode),
     };
 
-    let mut immediate: String = into_bin(operands.next().unwrap());
+    let imm_value: &str = operands.next().unwrap();
+    if imm_value.parse::<u32>().expect("Parsing not successfull!") % 4 != 0 {
+        panic!("Immediate value is not a valid address (multiple of 4)!");
+    }
+    if imm_value.parse::<u32>().expect("Parsing not successfull!") > 2048 {
+        panic!("Immediate value is exceeding valid address limits (greater than 2048)!");
+    }
+    let mut immediate: String = into_bin(imm_value);
     while immediate.len() < 12 {
         immediate = String::from("0") + immediate.as_str();
     }
