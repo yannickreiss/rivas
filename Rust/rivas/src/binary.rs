@@ -6,7 +6,7 @@ use crate::assembler;
 
 pub // file
 // store information about the input and output file
-struct file {
+struct File {
     name_in: String,
     name_out: String,
     cont_in: Vec<String>,
@@ -15,8 +15,8 @@ struct file {
 
 // Implementation of file
 // new, set_out, translate, write
-impl file {
-    pub fn new(input_filename: &str) -> file {
+impl File {
+    pub fn new(input_filename: &str) -> File {
         
         let content: String = fs::read_to_string(input_filename).expect("Could not open File {}!");
 
@@ -26,7 +26,7 @@ impl file {
             lines.push(String::from(instruction));
         }
 
-        file {
+        File {
             name_in: input_filename.to_owned(),
             name_out: String::from("out.rvb"),
             cont_in: lines,
@@ -48,8 +48,14 @@ impl file {
 
     pub fn write(&mut self) {
         println!("Assembling {} into {}", self.name_in, self.name_out);
+        println!("(");
         for line in 0..self.cont_out.len() {
-            println!("{}", self.cont_out[line]);
+            println!("b\"{}\", ", self.cont_out[line]);
         }
+        println!("others => (others => '0')");
+        println!(");");
+
+        // TODO: write to file in binary
+
     }
 }

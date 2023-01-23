@@ -1,7 +1,7 @@
 mod assembler;
 mod binary;
 
-use binary::*;
+use binary::{File};
 use core::panic;
 use std::env;
 
@@ -41,7 +41,7 @@ fn main() {
             }
         }
     }
-    let mut file = binary::file::new(filename);
+    let mut file = binary::File::new(filename);
 
     if (file_out != "") {
         file.set_out(file_out);
