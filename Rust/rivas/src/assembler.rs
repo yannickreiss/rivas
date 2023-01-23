@@ -199,20 +199,23 @@ fn btype(instruction: &str) -> String {
     let opcode: &str = operands.next().unwrap();
 
     let funct3: &str = match opcode.to_uppercase().as_str() {
-        "JALR" | "LB" | "ADDI" => "000",
-        "LH" => "001",
-        "LW" | "SLTI" => "010",
-        "SLTIU" => "011",
-        "LBU" | "XORI" => "100",
-        "LHU" => "101",
-        "ORI" => "110",
-        "ANDI" => "111",
+        "BEQ" => "000",
+        "BNE" => "001",
+        "BLT" => "100",
+        "BGE" => "101",
+        "BLTU" => "110",
+        "BGEU" => "111",
         _ => panic!("Unrecognized opcode: {}!", opcode),
     };
 
-    let rd: String = match operands.next() {
+    let rs1: String = match operands.next() {
         Some(x) => into_bin(x).clone(),
         None => panic!("3 missing operands in instruction {}!", opcode),
+    };
+
+    let rs2: String = match operands.next() {
+        Some(x) => into_bin(x).clone(),
+        None => panic!("2 missing operands in instruction {}!", opcode),
     };
 
     let mut immediate: String = into_bin(operands.next().unwrap());
@@ -220,23 +223,12 @@ fn btype(instruction: &str) -> String {
         immediate = String::from("0") + immediate.as_str();
     }
 
-    let rs1: String = match operands.next() {
-        Some(x) => into_bin(x).clone(),
-        None => panic!("2 missing operands in instruction {}!", opcode),
-    };
-    let opcode_bin: &str = match opcode.to_uppercase().as_str() {
-        "JALR" => "1100111",
-        "LB" | "LH" | "LW" | "LBU" | "LHU" => "0000011",
-        "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" => "0010011",
-        _ => panic!("Uncecognized opcode: {}!", opcode),
-    };
-
     match operands.next() {
         Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
         None => (),
     }
-
-    immediate + &rs1 + funct3 + &rd + opcode_bin
+    println!("Immediate: {}", immediate);
+    String::from("") + &immediate[..1] + &immediate[1..7] + &rs2 + &rs1 + funct3 + &immediate[7..] + "1100011"
 }
 
 fn utype(instruction: &str) -> String {
