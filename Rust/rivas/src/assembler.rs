@@ -14,6 +14,12 @@ struct Instruction {
 }
 
 pub fn translate(input: &str) -> String {
+    
+    // catch empty lines
+    if input  == "" {
+        return String::from("");
+    }
+
     let rv_: String;
 
     // Iterate over lines in input
@@ -224,9 +230,11 @@ fn btype(instruction: &str) -> String {
     if imm_value.parse::<u32>().expect("Parsing not successfull!") % 4 != 0 {
         panic!("Immediate value is not a valid address (multiple of 4)!");
     }
+    
     if imm_value.parse::<u32>().expect("Parsing not successfull!") > 2048 {
         panic!("Immediate value is exceeding valid address limits (greater than 2048)!");
     }
+
     let mut immediate: String = into_bin(imm_value);
     while immediate.len() < 12 {
         immediate = String::from("0") + immediate.as_str();
@@ -242,42 +250,23 @@ fn btype(instruction: &str) -> String {
 
 // U-Type not yet implemented
 fn utype(instruction: &str) -> String {
-    panic!("U-Types are not yet implemented!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
-
-    let funct3: &str = match opcode.to_uppercase().as_str() {
-        "JALR" | "LB" | "ADDI" => "000",
-        "LH" => "001",
-        "LW" | "SLTI" => "010",
-        "SLTIU" => "011",
-        "LBU" | "XORI" => "100",
-        "LHU" => "101",
-        "ORI" => "110",
-        "ANDI" => "111",
-        _ => panic!("Unrecognized opcode: {}!", opcode),
-    };
 
     let rd: String = match operands.next() {
         Some(x) => into_bin(x).clone(),
         None => panic!("3 missing operands in instruction {}!", opcode),
     };
 
-    let rs1: String = match operands.next() {
-        Some(x) => into_bin(x).clone(),
-        None => panic!("2 missing operands in instruction {}!", opcode),
-    };
-
     let mut immediate: String = into_bin(operands.next().unwrap());
-    while immediate.len() < 12 {
+    while immediate.len() < 20 {
         immediate = String::from("0") + immediate.as_str();
     }
 
     let opcode_bin: &str = match opcode.to_uppercase().as_str() {
-        "JALR" => "1100111",
-        "LB" | "LH" | "LW" | "LBU" | "LHU" => "0000011",
-        "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" => "0010011",
+        "LUI" => "0110111",
+        "AUIPC" => "0010111",
         _ => panic!("Uncecognized opcode: {}!", opcode),
     };
 
@@ -286,7 +275,7 @@ fn utype(instruction: &str) -> String {
         None => (),
     }
 
-    immediate + &rs1 + funct3 + &rd + opcode_bin
+    immediate + &rd + opcode_bin
 }
 
 // J-Type is not yet implemented!
