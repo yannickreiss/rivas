@@ -250,6 +250,7 @@ fn btype(instruction: &str) -> String {
 
 // U-Type not yet implemented
 fn utype(instruction: &str) -> String {
+    println!("CRITICAL WARNING: Assembling u-type instructions is not tested!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -280,49 +281,25 @@ fn utype(instruction: &str) -> String {
 
 // J-Type is not yet implemented!
 fn jtype(instruction: &str) -> String {
-    panic!("J-Type is not yet implemented!!!");
+    println!("CRITICAL WARNING: Assembling j-type instructions is not tested!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
-
-    let funct3: &str = match opcode.to_uppercase().as_str() {
-        "JALR" | "LB" | "ADDI" => "000",
-        "LH" => "001",
-        "LW" | "SLTI" => "010",
-        "SLTIU" => "011",
-        "LBU" | "XORI" => "100",
-        "LHU" => "101",
-        "ORI" => "110",
-        "ANDI" => "111",
-        _ => panic!("Unrecognized opcode: {}!", opcode),
-    };
 
     let rd: String = match operands.next() {
         Some(x) => into_bin(x).clone(),
         None => panic!("3 missing operands in instruction {}!", opcode),
     };
 
-    let rs1: String = match operands.next() {
-        Some(x) => into_bin(x).clone(),
-        None => panic!("2 missing operands in instruction {}!", opcode),
-    };
-
     let mut immediate: String = into_bin(operands.next().unwrap());
-    while immediate.len() < 12 {
+    while immediate.len() < 20 {
         immediate = String::from("0") + immediate.as_str();
     }
-
-    let opcode_bin: &str = match opcode.to_uppercase().as_str() {
-        "JALR" => "1100111",
-        "LB" | "LH" | "LW" | "LBU" | "LHU" => "0000011",
-        "ADDI" | "SLTI" | "SLTIU" | "XORI" | "ORI" | "ANDI" => "0010011",
-        _ => panic!("Uncecognized opcode: {}!", opcode),
-    };
 
     match operands.next() {
         Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
         None => (),
     }
 
-    immediate + &rs1 + funct3 + &rd + opcode_bin
+    String::from("") + &immediate[0..1] + &immediate[10..] + &immediate[9..10] + &immediate[1..9] + &rd + "1101111"
 }
