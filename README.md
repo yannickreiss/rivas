@@ -1,5 +1,5 @@
 # rivas: RISC-V Assember
-Currently Version 0.3   
+Currently Version 0.6
 Not implemented any features!
 
 ## Version 1.0 goals
