@@ -11,16 +11,13 @@ fn main() {
     let argc: usize = argv.len();
 
     // check if number of supplied arguments is alright
-    if argc < 1 {
+    if argc < 2 {
         panic!("Missing Arguments!");
-    }
-
-    if argc % 2 == 1 {
-        panic!("Wrong number of arguments given!");
     }
 
     let mut filename: &str = "";
     let mut file_out: &str = "";
+    let mut vhdl_mode: bool = false;
 
     // work through command line args
     println!("Running rivas Rust-Version at {}.", argv[0]);
@@ -36,12 +33,13 @@ fn main() {
                     argb = true;
                 }
                 "-h" => println!("Help: NYI!"),
-                "-vhdl" => println!("Format Code for usage in VHDL: NYI!"),
+                "-vhdl" => vhdl_mode = true,
                 _ => filename = &argv[i],
             }
         }
     }
     let mut file = binary::File::new(filename);
+    file.set_mode(vhdl_mode);
 
     if file_out != "" {
         file.set_out(file_out);
