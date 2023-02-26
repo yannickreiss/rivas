@@ -1,5 +1,6 @@
 use core::panic;
 use std::str::SplitWhitespace;
+use std::fmt;
 
 // Instruction
 // contain all instruction values
@@ -14,9 +15,8 @@ struct Instruction {
 }
 
 pub fn translate(input: &str) -> String {
-    
     // catch empty lines
-    if input  == "" {
+    if input == "" {
         return String::from("");
     }
 
@@ -54,7 +54,7 @@ fn into_bin(register: &str) -> String {
         register.to_string()
     };
 
-    let mut reg_id = reg.parse::<u32>().expect("Parsing not successfull!");
+    let mut reg_id = reg.parse::<i64>().expect("Parsing not successfull!");
 
     let mut reg_bin: String = String::from("");
     while reg_id > 0 {
@@ -230,7 +230,7 @@ fn btype(instruction: &str) -> String {
     if imm_value.parse::<u32>().expect("Parsing not successfull!") % 4 != 0 {
         panic!("Immediate value is not a valid address (multiple of 4)!");
     }
-    
+
     if imm_value.parse::<u32>().expect("Parsing not successfull!") > 2048 {
         panic!("Immediate value is exceeding valid address limits (greater than 2048)!");
     }
@@ -250,7 +250,6 @@ fn btype(instruction: &str) -> String {
 
 // U-Type not yet implemented
 fn utype(instruction: &str) -> String {
-    println!("CRITICAL WARNING: Assembling u-type instructions is not tested!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -281,7 +280,7 @@ fn utype(instruction: &str) -> String {
 
 // J-Type is not yet implemented!
 fn jtype(instruction: &str) -> String {
-    println!("CRITICAL WARNING: Assembling j-type instructions is not tested!");
+    panic!("CRITICAL WARNING: Assembling j-type instructions is not tested!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -300,6 +299,12 @@ fn jtype(instruction: &str) -> String {
         Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
         None => (),
     }
-
-    String::from("") + &immediate[0..1] + &immediate[10..] + &immediate[9..10] + &immediate[1..9] + &rd + "1101111"
+    
+    String::from("")
+        + &immediate[0..1]
+        + &immediate[10..20]
+        + &immediate[9..10]
+        + &immediate[1..9]
+        + &rd
+        + "1101111"
 }

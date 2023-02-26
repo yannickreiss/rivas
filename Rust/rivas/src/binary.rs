@@ -11,6 +11,7 @@ struct File {
     name_out: String,
     cont_in: Vec<String>,
     cont_out: Vec<String>,
+    vhdl_mode: bool,
 }
 
 // Implementation of file
@@ -30,6 +31,7 @@ impl File {
             name_out: String::from("out.rvb"),
             cont_in: lines,
             cont_out: Vec::new(),
+            vhdl_mode: false,
         }
     }
 
@@ -50,14 +52,20 @@ impl File {
 
     pub fn write(&mut self) {
         println!("Assembling {} into {}", self.name_in, self.name_out);
-        println!("(");
-        for line in 0..self.cont_out.len() {
-            println!("b\"{}\", ", self.cont_out[line]);
+        if self.vhdl_mode {
+            println!("(");
+            for line in 0..self.cont_out.len() {
+                println!("b\"{}\", ", self.cont_out[line]);
+            }
+            println!("others => (others => '0')");
+            println!(");");
+        } else {
+            // TODO: write to file in binary
         }
-        println!("others => (others => '0')");
-        println!(");");
+    }
 
-        // TODO: write to file in binary
+    pub fn set_mode(&mut self, mode: bool) {
+        self.vhdl_mode = mode;
     }
 }
 
