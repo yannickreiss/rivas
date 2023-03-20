@@ -73,8 +73,6 @@ fn into_bin(register: &str) -> String {
     // 2-Bit complement
     if register.starts_with('-') == true {
         let mut compl_imm: String = String::from("");
-        print!("CONVERSION WITH 2 BIT COMPLEMENT:");
-        println!("Immediate: {}", reg_bin);
 
         // negate
         for i in 0..reg_bin.len() {
@@ -84,8 +82,6 @@ fn into_bin(register: &str) -> String {
                 compl_imm = compl_imm.to_string() + &String::from("1");
             }
         }
-
-        println!("Pre adding: {}", compl_imm);
 
         // add one
         let mut j;
@@ -103,13 +99,9 @@ fn into_bin(register: &str) -> String {
             }
         }
 
-        println!("Pre extension: {}", compl_imm);
-
         while compl_imm.len() < 32 {
             compl_imm = String::from("1") + &compl_imm.to_string();
         }
-
-        println!("Converted: {}", compl_imm);
 
         compl_imm
     } else {
@@ -246,9 +238,8 @@ fn stype(instruction: &str) -> String {
     String::from("") + &immediate[5..11] + &rs2 + &rs1 + funct3 + &immediate[0..4] + "0100011"
 }
 
-// B-Types not yet implemented!
+// B-Types
 fn btype(instruction: &str) -> String {
-    println!("B-Types are not yet implemented!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
@@ -283,6 +274,9 @@ fn btype(instruction: &str) -> String {
     }
 
     let mut immediate: String = into_bin(imm_value);
+    while immediate.len() < 32 {
+        immediate = String::from("0") + &immediate.to_string();
+    }
 
     match operands.next() {
         Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
