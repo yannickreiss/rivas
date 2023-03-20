@@ -56,14 +56,6 @@ fn into_bin(register: &str) -> String {
 
     let mut reg_id = reg.parse::<i64>().expect("Parsing not successfull!");
 
-    if register.starts_with('-') == true {
-        reg_id *= -1;
-    }
-
-    if reg_id < 0 {
-        return format!("{:b}", reg_id);
-    }
-
     let mut reg_bin: String = String::from("");
     while reg_id > 0 {
         if reg_id % 2 == 1 {
@@ -71,12 +63,58 @@ fn into_bin(register: &str) -> String {
         } else {
             reg_bin = String::from("0") + &reg_bin.to_string();
         }
+
         reg_id /= 2;
     }
     while reg_bin.len() < 5 {
         reg_bin = String::from("0") + reg_bin.as_str();
     }
-    reg_bin
+
+    // 2-Bit complement
+    if register.starts_with('-') == true {
+        let mut compl_imm: String = String::from("");
+        print!("CONVERSION WITH 2 BIT COMPLEMENT:");
+        println!("Immediate: {}", reg_bin);
+
+        // negate
+        for i in 0..reg_bin.len() {
+            if reg_bin[i..i + 1] == String::from("1") {
+                compl_imm = compl_imm.to_string() + &String::from("0");
+            } else {
+                compl_imm = compl_imm.to_string() + &String::from("1");
+            }
+        }
+
+        println!("Pre adding: {}", compl_imm);
+
+        // add one
+        let mut j;
+        for i in 0..reg_bin.len() {
+            j = reg_bin.len() - i;
+            if compl_imm[j - 1..j] == String::from("0") {
+                compl_imm = compl_imm[0..j - 1].to_string()
+                    + &String::from("1")
+                    + &compl_imm[j..compl_imm.len()].to_string();
+                break;
+            } else {
+                compl_imm = compl_imm[0..j - 1].to_string()
+                    + &String::from("0")
+                    + &compl_imm[j..compl_imm.len()].to_string();
+            }
+        }
+
+        println!("Pre extension: {}", compl_imm);
+
+        while compl_imm.len() < 32 {
+            compl_imm = String::from("1") + &compl_imm.to_string();
+        }
+
+        println!("Converted: {}", compl_imm);
+
+        compl_imm
+    } else {
+        reg_bin
+    }
 }
 
 fn rtype(instruction: &str) -> String {
@@ -245,23 +283,20 @@ fn btype(instruction: &str) -> String {
     }
 
     let mut immediate: String = into_bin(imm_value);
-    while immediate.len() < 12 {
-        immediate = String::from("0") + immediate.as_str();
-    }
 
     match operands.next() {
         Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
         None => (),
     }
-    println!("Immediate: {}", immediate);
+
     String::from("")
-        + &immediate[0..1]
-        + &immediate[2..8]
+        + &immediate[19..20]
+        + &immediate[21..27]
         + &rs2
         + &rs1
         + funct3
-        + &immediate[8..12]
-        + &immediate[1..2]
+        + &immediate[27..31]
+        + &immediate[20..21]
         + "1100011"
 }
 

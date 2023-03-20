@@ -68,11 +68,3 @@ impl File {
         self.vhdl_mode = mode;
     }
 }
-
-fn binary_to_character(word: &str) -> String {
-    if word.len() != 32 {
-        panic!("Word could not be converted to bytes: Length doesn't match!");
-    }
-
-    String::new()
-}
