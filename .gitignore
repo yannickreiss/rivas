@@ -1,5 +1,5 @@
-Rust/rivas/Cargo.lock
-Rust/rivas/target/
+Cargo.lock
+target/
 Ada/rivas/rivas 
 *.ali
 *.o
