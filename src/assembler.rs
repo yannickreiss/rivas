@@ -196,13 +196,11 @@ fn itype(instruction: &str) -> String {
     immediate + &rs1 + funct3 + &rd + opcode_bin
 }
 
-// Still unfinished. DO NOT USE UNTIL Tested!
+// S-Types
 fn stype(instruction: &str) -> String {
-    panic!("S-Types not yet tested!!!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
-    println!("OPC:\t{}", opcode);
 
     let funct3: &str = match opcode.to_uppercase().as_str() {
         "SB" => "000",
@@ -210,32 +208,28 @@ fn stype(instruction: &str) -> String {
         "SW" => "010",
         _ => panic!("Unrecognized opcode: {}!", opcode),
     };
-    println!("FN3:\t{}", funct3);
 
     let rs1: String = match operands.next() {
         Some(x) => into_bin(x).clone(),
-        None => panic!("2 missing operands in instruction {}!", opcode),
+        None => panic!("3 missing operands in instruction {}!", opcode),
     };
-    println!("rs1:\t{}", rs1);
+
+    let mut immediate: String = into_bin(operands.next().unwrap());
+    while immediate.len() < 32 {
+        immediate = String::from("0") + immediate.as_str();
+    }
 
     let rs2: String = match operands.next() {
         Some(x) => into_bin(x).clone(),
         None => panic!("1 missing operand in instruction {}!", opcode),
     };
-    println!("rs2:\t{}", rs2);
-
-    let mut immediate: String = into_bin(operands.next().unwrap());
-    while immediate.len() < 12 {
-        immediate = String::from("0") + immediate.as_str();
-    }
-    println!("imm:\t{}", immediate);
 
     match operands.next() {
         Some(x) => panic!("Operand {} in instruction {} is not used!", x, opcode),
         None => (),
     }
 
-    String::from("") + &immediate[5..11] + &rs2 + &rs1 + funct3 + &immediate[0..4] + "0100011"
+    String::from("") + &immediate[20..27] + &rs1 + &rs2 + funct3 + &immediate[27..32] + "0100011"
 }
 
 // B-Types
@@ -326,18 +320,22 @@ fn utype(instruction: &str) -> String {
 
 // J-Type is not yet implemented!
 fn jtype(instruction: &str) -> String {
-    println!("CRITICAL WARNING: Assembling j-type instructions is not tested!");
     let mut operands: SplitWhitespace = instruction.split_whitespace();
 
     let opcode: &str = operands.next().unwrap();
 
     let rd: String = match operands.next() {
         Some(x) => into_bin(x).clone(),
-        None => panic!("3 missing operands in instruction {}!", opcode),
+        None => panic!("2 missing operands in instruction {}!", opcode),
     };
 
-    let mut immediate: String = into_bin(operands.next().unwrap());
-    while immediate.len() < 20 {
+    let imm: String = match operands.next() {
+        Some(x) => x.to_string(),
+        None => panic!("1 missing operand in instruction {}!", opcode),
+    };
+
+    let mut immediate: String = into_bin(&imm);
+    while immediate.len() < 32 {
         immediate = String::from("0") + immediate.as_str();
     }
 
@@ -347,10 +345,10 @@ fn jtype(instruction: &str) -> String {
     }
 
     String::from("")
-        + &immediate[0..1]
-        + &immediate[10..20]
-        + &immediate[9..10]
-        + &immediate[1..9]
+        + &immediate[11..12]
+        + &immediate[21..31]
+        + &immediate[20..21]
+        + &immediate[12..20]
         + &rd
         + "1101111"
 }

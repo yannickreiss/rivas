@@ -3,3 +3,4 @@ jal x0, 372075
 add x1, x1, x2
 bgeu x3 x4 -16
 lui x0, 192522
+sw x2 1024 x3
