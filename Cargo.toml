@@ -1,6 +1,6 @@
 [package]
 name = "rivas"
-version = "0.1.7"
+version = "0.1.9"
 edition = "2021"
 authors = ["Yannick Reiß yannick.reiss@protonmail.ch"]
 description = "RISC-V Assembler: currently not on a working state."

@@ -32,7 +32,12 @@ fn main() {
                     file_out = &argv[i + 1];
                     argb = true;
                 }
-                "-h" => println!("Help: NYI!"),
+                "-h" => {
+                    println!("rivas - command line options");
+                    println!("-o <filename>\t\tSet filename for file output.");
+                    println!("-h\t\t\t Print this help message.");
+                    println!("-vhdl\t\t\t Print VHDL compatible binary values and stores them in a file.");
+                }
                 "-vhdl" => vhdl_mode = true,
                 _ => filename = &argv[i],
             }

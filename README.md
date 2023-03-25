@@ -1,6 +1,6 @@
 # rivas: RISC-V Assember #
 
-Currently Version 0.1.7
+Current Version: 0.1.9
 
 ## Table of Contents ##
 
@@ -62,19 +62,18 @@ To build and use this program under windows, you need to have rust and cargo ins
 
 ### Version 0.2.0 goals ###
 
-- Input a file to generate RISC-V binary with same name
-- commandline option `-o` to specify output name (Partially Done) (not outputting atm)
+- commandline option `-o` to specify output name (Done)
 - Output a file with code ready to embed in VHDL (Partially Done) (Output to stdout)
 - Assemble all 32I-Base instructions (Done)
 
 ### Version 0.3.0 goals ###
 
-- reserved registers names
-- `(offset)reg` Syntax
+- reserved registers names (done)
+- ABI-Syntax     (done)
+- Input a file to generate RISC-V binary with same name
 - labels
 
 ## Current release ##
 
 There is currently no release, as the program is still in developement of it's basic features.
 The first release will be the version **0.2.0**.
-If you only want to play around with the program, you can use the version **0.1.7** binary located at `target/release/rivas`.

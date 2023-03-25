@@ -1,6 +1,6 @@
 use assembler::translate;
 // imports for file operations
-use std::fs;
+use std::{fs, io::Write};
 
 use crate::assembler;
 
@@ -54,11 +54,18 @@ impl File {
         println!("Assembling {} into {}", self.name_in, self.name_out);
         if self.vhdl_mode {
             println!("(");
+            let mut vh_file = fs::File::create(&self.name_out).expect("Could not create File!");
+            writeln!(vh_file, "(").expect("Could not write to VHDL file.");
+
             for line in 0..self.cont_out.len() {
                 println!("b\"{}\", ", self.cont_out[line]);
+                writeln!(vh_file, "b\"{}\", ", self.cont_out[line])
+                    .expect("Could not write to VHDL file.");
             }
             println!("others => (others => '0')");
             println!(");");
+            writeln!(vh_file, "others => (others => '0'));")
+                .expect("Could not write to VHDL file.");
         } else {
             // TODO: write to file in binary
         }

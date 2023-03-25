@@ -31,3 +31,13 @@ target/release/.fingerprint/rivas-09567d372078db0a/output-bin-rivas
 target/release/deps/rivas-09567d372078db0a
 target/release/deps/rivas-09567d372078db0a.d
 target/x86_64-unknown-linux-musl/release/rivas
+test_.b
+test.b
+target/release/.fingerprint/rivas-146103ae907d1809/bin-rivas
+target/release/.fingerprint/rivas-146103ae907d1809/bin-rivas.json
+target/release/.fingerprint/rivas-146103ae907d1809/dep-bin-rivas
+.gitignore
+target/release/.fingerprint/rivas-146103ae907d1809/invoked.timestamp
+target/release/.fingerprint/rivas-146103ae907d1809/output-bin-rivas
+target/release/deps/rivas-146103ae907d1809
+target/release/deps/rivas-146103ae907d1809.d

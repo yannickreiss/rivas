@@ -15,15 +15,21 @@ struct Instruction {
 }
 
 pub fn translate(input: &str) -> String {
-    // catch empty lines
-    if input == "" {
+    // catch empty lines and comments
+    if (input == "") || (&input[0..1] == "#") || (&input[0..1] == ";") || (&input[0..2] == "--") {
         return String::from("");
     }
 
     let rv_: String;
 
     // Iterate over lines in input
-    let instruction: String = String::from(str::replace(input, ",", " "));
+    // Convert ABI into bare assembler (registers will be replaced later)
+    //   replace brackets
+    let mut rm_bracket: String = String::from(str::replace(input, "(", " "));
+    rm_bracket = String::from(str::replace(&rm_bracket.to_string(), ")", ""));
+    let instruction: String = String::from(str::replace(&rm_bracket, ",", " "));
+
+    
     println!("Instruction: {}", instruction);
     let mut token = instruction.split_whitespace();
 
@@ -54,7 +60,43 @@ fn into_bin(register: &str) -> String {
         register.to_string()
     };
 
-    let mut reg_id = reg.parse::<i64>().expect("Parsing not successfull!");
+    // catch ABI register names
+    let mut reg_id: i64;
+    match reg.as_str() {
+	"zero" => reg_id = 0,
+	"ra" => reg_id = 1,
+	"sp" => reg_id = 2,
+	"gp" => reg_id = 3,
+	"tp" => reg_id = 4,
+	"t0" => reg_id = 5,
+	"t1" => reg_id = 6,
+	"t2" => reg_id = 7,
+	"s0" | "fp" => reg_id = 8,
+	"s1" => reg_id = 9,
+	"a0" => reg_id = 10,
+	"a1" => reg_id = 11,
+	"a2" => reg_id = 12,
+	"a3" => reg_id = 13,
+	"a4" => reg_id = 14,
+	"a5" => reg_id = 15,
+	"a6" => reg_id = 16,
+	"a7" => reg_id = 17,
+	"s2" => reg_id = 18,
+	"s3" => reg_id = 19,
+	"s4" => reg_id = 20,
+	"s5" => reg_id = 21,
+	"s6" => reg_id = 22,
+	"s7" => reg_id = 23,
+	"s8" => reg_id = 24,
+	"s9" => reg_id = 25,
+	"s10" => reg_id = 26,
+	"s11" => reg_id = 27,
+	"t3" => reg_id = 28,
+	"t4" => reg_id = 29,
+	"t5" => reg_id = 30,
+	"t6" => reg_id = 31,
+	_ => reg_id = reg.parse::<i64>().expect("Parsing not successfull!"),
+    }
 
     let mut reg_bin: String = String::from("");
     while reg_id > 0 {
