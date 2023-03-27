@@ -41,3 +41,4 @@ target/release/.fingerprint/rivas-146103ae907d1809/invoked.timestamp
 target/release/.fingerprint/rivas-146103ae907d1809/output-bin-rivas
 target/release/deps/rivas-146103ae907d1809
 target/release/deps/rivas-146103ae907d1809.d
+test.o.vhdl

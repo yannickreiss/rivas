@@ -1,18 +1,5 @@
 use core::panic;
-use std::fmt;
 use std::str::SplitWhitespace;
-
-// Instruction
-// contain all instruction values
-struct Instruction {
-    opcode: String,
-    rd: String,
-    rs1: String,
-    rs2: String,
-    funct3: String,
-    funct7: String,
-    immediate: String,
-}
 
 pub fn translate(input: &str) -> String {
     // catch empty lines and comments

@@ -1,6 +1,6 @@
 # rivas: RISC-V Assember #
 
-Current Version: 0.1.9
+Current Version: 0.2.0
 
 ## Table of Contents ##
 
@@ -20,7 +20,7 @@ Current Version: 0.1.9
 
 ## What is this ##
 
-This is a very little riscv32 assembler. 
+This is a very little riscv32 assembler.
 It's main feature is to generate binary code, ready to embed in hardware description code.
 There are barely any plans to add any other features.
 Also I will only continue working on this, when I need to generate riscv-assembly for VHDL myself.
@@ -63,13 +63,13 @@ To build and use this program under windows, you need to have rust and cargo ins
 ### Version 0.2.0 goals ###
 
 - commandline option `-o` to specify output name (Done)
-- Output a file with code ready to embed in VHDL (Partially Done) (Output to stdout)
+- Output a file with code ready to embed in VHDL (Done) (Output to stdout and .o.vhdl)
 - Assemble all 32I-Base instructions (Done)
+- reserved registers names (done)
+- ABI-Syntax     (done)
 
 ### Version 0.3.0 goals ###
 
-- reserved registers names (done)
-- ABI-Syntax     (done)
 - Input a file to generate RISC-V binary with same name
 - labels
 

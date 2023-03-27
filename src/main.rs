@@ -1,7 +1,6 @@
 mod assembler;
 mod binary;
 
-use binary::{File};
 use core::panic;
 use std::env;
 
@@ -18,6 +17,7 @@ fn main() {
     let mut filename: &str = "";
     let mut file_out: &str = "";
     let mut vhdl_mode: bool = false;
+    let mut file_out_name: String;
 
     // work through command line args
     println!("Running rivas Rust-Version at {}.", argv[0]);
@@ -29,7 +29,8 @@ fn main() {
         } else {
             match argv[i].as_str() {
                 "-o" => {
-                    file_out = &argv[i + 1];
+                    file_out_name = String::from("") + &argv[i + 1] + ".vhdl";
+                    file_out = file_out_name.as_str();
                     argb = true;
                 }
                 "-h" => {
