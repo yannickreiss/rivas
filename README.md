@@ -72,6 +72,7 @@ To build and use this program under windows, you need to have rust and cargo ins
 
 - Input a file to generate RISC-V binary with same name
 - labels
+- Generate full VHDL memory entity
 
 ## Current release ##
 
